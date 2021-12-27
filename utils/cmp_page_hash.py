@@ -10,7 +10,7 @@ part = int(sys.argv[3]) # divide the page into n parts
 file_name_1 = sys.argv[1]
 file_name_2 = sys.argv[2]
 
-print ("duplicated content in file 1:")
+print ("checking duplicated content in file 1...")
 with open(file_name_1, "rb") as fp:
     i = 1
     j = 1
@@ -31,7 +31,7 @@ with open(file_name_1, "rb") as fp:
             i = 1
             j += 1
         
-print ("duplicated content in file 2:")
+print ("checking duplicated content in file 2...")
 with open(file_name_2, "rb") as fp:
     i = 1
     j = 1
@@ -55,4 +55,3 @@ with open(file_name_2, "rb") as fp:
         if i == part + 1:
             i = 1
             j += 1
-                        
