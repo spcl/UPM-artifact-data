@@ -1,35 +1,41 @@
 #!/bin/bash
 
 # /root/
-# ./concurrent_containers.sh 411.image-recognition 5 16
+# ./concurrent_containers.sh 411.image-recognition 5 16 einstein_vm
 benchmark=$1
 request_times=$2
 container_num=$3
-
+machine=$4
 read -p "is dedup is on?" dedup
 
-if [ ! -d "/data/$benchmark" ]; then
-    mkdir /data/$benchmark/
-fi
+# if [ ! -d "/data/$benchmark" ]; then
+#     mkdir /data/$benchmark/
+# fi
+
+dedup_on_data_dir="/root/usm_plot_data_needed/$machine/memory_usage/$benchmark/function_memory/dedup_on"
+dedup_off_data_dir="/root/usm_plot_data_needed/$machine/memory_usage/$benchmark/function_memory/dedup_off"
 
 if [[ "$dedup" == "1" ]]; then
-    if [ ! -d "/data/$benchmark/concurrent_containers_dedupon" ]; then
-        mkdir /data/$benchmark/concurrent_containers_dedupon
+    if [ ! -d "$dedup_on_data_dir" ]; then
+        mkdir $dedup_on_data_dir
     fi
-    data_dir="/data/$benchmark/concurrent_containers_dedupon"
+    data_dir=$dedup_on_data_dir
 fi
 
 if [[ "$dedup" == "0" ]]; then
-    if [ ! -d "/data/$benchmark/concurrent_containers_dedupoff" ]; then
-        mkdir /data/$benchmark/concurrent_containers_dedupoff
+    if [ ! -d $dedup_off_data_dir ]; then
+        mkdir $dedup_off_data_dir
     fi
-    data_dir="/data/$benchmark/concurrent_containers_dedupoff"
+    data_dir=$dedup_off_data_dir
 fi
 
-utils_dir="/root/utils"
+utils_dir="/root/usm_plot_data_needed/utils"
 
 docker stop `docker ps -a -q`
 docker rm `docker ps -a -q`
+
+echo "0 container:" > $data_dir/system_memory_usage.txt
+free -h >>  $data_dir/system_memory_usage.txt
 
 for ((i=1; i<=container_num; i=i*2))
 do
@@ -76,6 +82,8 @@ do
         sudo pmap -XX ${docker_pid} >> ${data_dir}/${i}/pmap${k}.txt
     done
 
+    echo "$i container:" >> $data_dir/system_memory_usage.txt
+    free -h >>  $data_dir/system_memory_usage.txt
 done
 
 # parse the pmap files
@@ -90,4 +98,4 @@ do
 done
 
 deactivate
-python3 ${utils_dir}/plot_concurrent.py $benchmark $container_num $dedup
+# python3 ${utils_dir}/plot_concurrent.py $benchmark $container_num $dedup
