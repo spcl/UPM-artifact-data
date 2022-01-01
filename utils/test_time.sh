@@ -22,11 +22,11 @@ machine=$2
 utils_dir="/root/utils"
 
 
-for ((i=1; j<=10; i++))
+for ((i=1; i<=repeated_time; i++))
 do
-    docker stop `docker ps -a -q`
-    docker rm `docker ps -a -q`
-
+    docker stop `docker ps -a -q` > /dev/null
+    docker rm `docker ps -a -q` > /dev/null
+    echo "${i}th iteration"
     for ((j=1; j<=16; j++))
     do
         echo "starting container $j"
