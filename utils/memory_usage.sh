@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # /root/
-# ./concurrent_containers.sh 411.image-recognition 5 16 einstein_vm
+# ./memory_usage.sh image-recognition 5 16 einstein_vm
 benchmark=$1
 request_times=$2
 container_num=$3
@@ -35,7 +35,7 @@ docker stop `docker ps -a -q`
 docker rm `docker ps -a -q`
 
 echo "0 container:" > $data_dir/system_memory_usage.txt
-free -h >>  $data_dir/system_memory_usage.txt
+free >>  $data_dir/system_memory_usage.txt
 
 for ((i=1; i<=container_num; i=i*2))
 do
@@ -48,8 +48,8 @@ do
         echo "starting container $j"
         command_dir=/root/serverless-benchmarks${j}
         cd $command_dir
-        source ./sebs-virtualenv/bin/activate
-        ./sebs.py local start $benchmark large concurrenttest_out.json --config config/example.json --deployments 1 --verbose --no-remove-containers
+        source ./python-venv/bin/activate
+        ./sebs.py local start 411.$benchmark large concurrenttest_out.json --config config/example.json --deployments 1 --verbose --no-remove-containers
         docker_name=`docker ps | awk '{print $NF}' | awk 'NR==2{print}'`
         # read -p "input of container ${j}:" input
         input=`python3 $utils_dir/get_curl_input.py /root/serverless-benchmarks${j}/concurrenttest_out.json`
@@ -83,14 +83,14 @@ do
     done
 
     echo "$i container:" >> $data_dir/system_memory_usage.txt
-    free -h >>  $data_dir/system_memory_usage.txt
+    free >>  $data_dir/system_memory_usage.txt
 done
 
 # parse the pmap files
 cd $data_dir
 for concurrent_dir in `ls | sort -V`
 do
-    if [[ "$concurrent_dir" == "concurrent.jpg" ]]
+    if [[ "$concurrent_dir" == "system_memory_usage.txt" ]]
     then
         continue
     fi
