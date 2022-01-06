@@ -1,8 +1,7 @@
 #!/bin/bash
 
-# ./test_time.sh $repeated_times $machine
-# eg: ./test_time.sh 10 einstein_vm
-
+# ./test_time.sh
+# $REPEATED_TIMESs $MACHINE $UTILS_DIR
 
 ######################### FTRACE #############################
 # ./test_time.sh 1
@@ -14,15 +13,7 @@
 # mount -t tracefs nodev /sys/kernel/tracing
 ##############################################################
 
-benchmark="411.image-recognition"
-repeated_time=$1
-machine=$2
-
-
-utils_dir="/root/utils"
-
-
-for ((i=1; i<=repeated_time; i++))
+for ((i=1; i<=REPEATED_TIMES; i++))
 do
     docker stop `docker ps -a -q` > /dev/null
     docker rm `docker ps -a -q` > /dev/null
@@ -36,7 +27,7 @@ do
         ./sebs.py local start $benchmark large myout.json --config config/example.json --deployments 1 --verbose --no-remove-containers
         docker_name=`docker ps | awk '{print $NF}' | awk 'NR==2{print}'`
         # read -p "input of container ${j}:" input
-        input=`python3 $utils_dir/get_curl_input.py /root/serverless-benchmarks${j}/myout.json`
+        input=`python3 $UTILS_DIR/get_curl_input.py /root/serverless-benchmarks${j}/myout.json`
         # echo $input
         ip=$((2*j+1))
         
@@ -69,8 +60,8 @@ do
         # then
             # echo "ftrace is off"
 
-        out_file="/root/usm_plot_data_needed/$machine/time_cost/image-recognition/times$i/container$j.json"
-        mkdir /root/usm_plot_data_needed/$machine/time_cost/image-recognition/times$i
+        out_file="/root/usm_plot_data_needed/$MACHINE/time_cost/image-recognition/times$i/container$j.json"
+        mkdir /root/usm_plot_data_needed/$MACHINE/time_cost/image-recognition/times$i
         if [ ! -f "$out_file" ]; then
             curl_cmd > $out_file
         else

@@ -2,18 +2,16 @@
 
 # /root/
 # ./memory_usage.sh image-recognition 5 16 einstein_vm
-benchmark=$1
-request_times=$2
-container_num=$3
-machine=$4
+request_times=5
+
 read -p "is dedup is on?" dedup
 
-# if [ ! -d "/data/$benchmark" ]; then
-#     mkdir /data/$benchmark/
+# if [ ! -d "/data/$BENCHMARK" ]; then
+#     mkdir /data/$BENCHMARK/
 # fi
 
-dedup_on_data_dir="/root/usm_plot_data_needed/$machine/memory_usage/$benchmark/function_memory/dedup_on"
-dedup_off_data_dir="/root/usm_plot_data_needed/$machine/memory_usage/$benchmark/function_memory/dedup_off"
+dedup_on_data_dir="/root/usm_plot_data_needed/$MACHINE/memory_usage/$BENCHMARK/function_memory/dedup_on"
+dedup_off_data_dir="/root/usm_plot_data_needed/$MACHINE/memory_usage/$BENCHMARK/function_memory/dedup_off"
 
 if [[ "$dedup" == "1" ]]; then
     if [ ! -d "$dedup_on_data_dir" ]; then
@@ -29,7 +27,6 @@ if [[ "$dedup" == "0" ]]; then
     data_dir=$dedup_off_data_dir
 fi
 
-utils_dir="/root/usm_plot_data_needed/utils"
 
 docker stop `docker ps -a -q`
 docker rm `docker ps -a -q`
@@ -37,9 +34,9 @@ docker rm `docker ps -a -q`
 echo "0 container:" > $data_dir/system_memory_usage.txt
 free >>  $data_dir/system_memory_usage.txt
 
-for ((i=1; i<=container_num; i=i*2))
+for ((i=1; i<=CONTAINER_NUM; i=i*2))
 do
-    echo "concurrent $i containers"
+    echo "concurrent $i containers"q
     # echo "making dir $data_dir/$i"
     mkdir $data_dir/$i
     # start and curl new containers
@@ -49,25 +46,25 @@ do
         command_dir=/root/serverless-benchmarks${j}
         cd $command_dir
         source ./python-venv/bin/activate
-        ./sebs.py local start 411.$benchmark large concurrenttest_out.json --config config/example.json --deployments 1 --verbose --no-remove-containers
+        ./sebs.py local start 411.$BENCHMARK large concurrenttest_out.json --config config/example.json --deployments 1 --verbose --no-remove-containers
         docker_name=`docker ps | awk '{print $NF}' | awk 'NR==2{print}'`
         # read -p "input of container ${j}:" input
-        input=`python3 $utils_dir/get_curl_input.py /root/serverless-benchmarks${j}/concurrenttest_out.json`
+        input=`python3 $UTILS_DIR/get_curl_input.py /root/serverless-benchmarks${j}/concurrenttest_out.json`
         echo $input
         ip=$((2*j+1))
         # echo "Curling container $j $docker_name with ip 172.17.0.${ip}..."
-        # mkdir /root/curl_${benchmark}
+        # mkdir /root/curl_${BENCHMARK}
         curl_cmd() {
-            curl 172.17.0.$ip:9000 --request POST --data "$input" --header 'Content-Type:application/json' #>> /root/curl_${benchmark}/curl_result${j}.txt
+            curl 172.17.0.$ip:9000 --request POST --data "$input" --header 'Content-Type:application/json' #>> /root/curl_${BENCHMARK}/curl_result${j}.txt
         }
         for ((n=1; n<=request_times; n++))
         do
             curl_cmd
         done
         if [[ "$i" == "16" ]]; then
-            input=`python3 $utils_dir/get_curl_input.py /root/serverless-benchmarks1/concurrenttest_out.json`
+            input=`python3 $UTILS_DIR/get_curl_input.py /root/serverless-benchmarks1/concurrenttest_out.json`
             curl 172.17.0.3:9000 --request POST --data "$input" --header 'Content-Type:application/json'
-            input=`python3 $utils_dir/get_curl_input.py /root/serverless-benchmarks2/concurrenttest_out.json`
+            input=`python3 $UTILS_DIR/get_curl_input.py /root/serverless-benchmarks2/concurrenttest_out.json`
             curl 172.17.0.5:9000 --request POST --data "$input" --header 'Content-Type:application/json'
         fi
         echo ""
@@ -94,8 +91,8 @@ do
     then
         continue
     fi
-    $utils_dir/loop_pmap.sh $data_dir/$concurrent_dir pmap_result${concurrent_dir}.csv
+    $UTILS_DIR/loop_pmap.sh $data_dir/$concurrent_dir pmap_result${concurrent_dir}.csv
 done
 
 deactivate
-# python3 ${utils_dir}/plot_concurrent.py $benchmark $container_num $dedup
+# python3 ${UTILS_DIR}/plot_concurrent.py $BENCHMARK $CONTAINER_NUM $dedup
