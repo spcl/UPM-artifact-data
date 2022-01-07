@@ -4,7 +4,6 @@
 # ./memory_usage.sh image-recognition 5 16 einstein_vm
 request_times=5
 
-read -p "is dedup is on?" dedup
 
 # if [ ! -d "/data/$BENCHMARK" ]; then
 #     mkdir /data/$BENCHMARK/
@@ -13,14 +12,14 @@ read -p "is dedup is on?" dedup
 dedup_on_data_dir="/root/usm_plot_data_needed/$MACHINE/memory_usage/$BENCHMARK/function_memory/dedup_on"
 dedup_off_data_dir="/root/usm_plot_data_needed/$MACHINE/memory_usage/$BENCHMARK/function_memory/dedup_off"
 
-if [[ "$dedup" == "1" ]]; then
+if [[ "$DEDUP_ON" == "1" ]]; then
     if [ ! -d "$dedup_on_data_dir" ]; then
         mkdir $dedup_on_data_dir
     fi
     data_dir=$dedup_on_data_dir
 fi
 
-if [[ "$dedup" == "0" ]]; then
+if [[ "$DEDUP_ON" == "0" ]]; then
     if [ ! -d $dedup_off_data_dir ]; then
         mkdir $dedup_off_data_dir
     fi
