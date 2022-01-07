@@ -46,7 +46,7 @@ do
         command_dir=/root/serverless-benchmarks${j}
         cd $command_dir
         source ./python-venv/bin/activate
-        ./sebs.py local start 411.$BENCHMARK large concurrenttest_out.json --config config/example.json --deployments 1 --verbose --no-remove-containers
+        ./sebs.py local start $BENCHMARK large concurrenttest_out.json --config config/example.json --deployments 1 --verbose --no-remove-containers
         docker_name=`docker ps | awk '{print $NF}' | awk 'NR==2{print}'`
         # read -p "input of container ${j}:" input
         input=`python3 $UTILS_DIR/get_curl_input.py /root/serverless-benchmarks${j}/concurrenttest_out.json`

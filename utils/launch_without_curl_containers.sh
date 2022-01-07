@@ -4,7 +4,7 @@
 # benchmark="411.image-recognition"
 num=16
 
-docker stop `docker ps -a- -q`
+docker stop `docker ps -a -q`
 docker rm `docker ps -a -q`
 
 for ((j=1; j<=num; j++))
