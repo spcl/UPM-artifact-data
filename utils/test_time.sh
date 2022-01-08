@@ -24,7 +24,7 @@ do
         command_dir=/root/serverless-benchmarks${j}
         cd $command_dir
         source ./python-venv/bin/activate
-        ./sebs.py local start $benchmark large myout.json --config config/example.json --deployments 1 --verbose --no-remove-containers
+        ./sebs.py local start $BENCHMARK large myout.json --config config/example.json --deployments 1 --verbose --no-remove-containers
         docker_name=`docker ps | awk '{print $NF}' | awk 'NR==2{print}'`
         # read -p "input of container ${j}:" input
         input=`python3 $UTILS_DIR/get_curl_input.py /root/serverless-benchmarks${j}/myout.json`
@@ -60,8 +60,8 @@ do
         # then
             # echo "ftrace is off"
 
-        out_file="/root/usm_plot_data_needed/$MACHINE/time_cost/image-recognition/times$i/container$j.json"
-        mkdir /root/usm_plot_data_needed/$MACHINE/time_cost/image-recognition/times$i
+        out_file="/root/usm_plot_data_needed/$MACHINE/time_cost/$BENCHMARK/times$i/container$j.json"
+        mkdir /root/usm_plot_data_needed/$MACHINE/time_cost/$BENCHMARK/times$i
         if [ ! -f "$out_file" ]; then
             curl_cmd > $out_file
         else
