@@ -1,0 +1,24 @@
+0 container:
+              total        used        free      shared  buff/cache   available
+Mem:       49450856      488848    42861672         704     6100336    48410244
+Swap:       2097148           0     2097148
+1 container:
+              total        used        free      shared  buff/cache   available
+Mem:       49450856      803212    42188216         852     6459428    48097616
+Swap:       2097148           0     2097148
+2 container:
+              total        used        free      shared  buff/cache   available
+Mem:       49450856     1066304    41550596        1000     6833956    47829132
+Swap:       2097148           0     2097148
+4 container:
+              total        used        free      shared  buff/cache   available
+Mem:       49450856     1610504    40254672        1296     7585680    47275060
+Swap:       2097148           0     2097148
+8 container:
+              total        used        free      shared  buff/cache   available
+Mem:       49450856     2635392    37726632        1888     9088832    46234196
+Swap:       2097148           0     2097148
+16 container:
+              total        used        free      shared  buff/cache   available
+Mem:       49450856     4747380    32594508        3072    12108968    44131148
+Swap:       2097148           0     2097148
