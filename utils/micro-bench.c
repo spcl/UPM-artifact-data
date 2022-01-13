@@ -23,8 +23,8 @@ int main(int argc, char *argv[])
     madvise((void *)buffer_aligned, size, 20);
     clock_t end = clock();
     double time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
-    printf("time_spent: %f\n", time_spent);
-    printf("finished?");
-    scanf("%d", &finish);
+    printf("%f,", time_spent);
+    // printf("finished?");
+    // scanf("%d", &finish);
     return 0;
 }
