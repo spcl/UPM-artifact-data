@@ -15,6 +15,6 @@ cd $data_dir
 # iterate over all pmap txt
 for filename in `ls pmap*.txt | sort -V`
 do
-    /root/utils/parse_pmap.sh $filename $out_file_name
+    $UTILS_DIR/parse_pmap.sh $filename $out_file_name
     echo $filename
 done
