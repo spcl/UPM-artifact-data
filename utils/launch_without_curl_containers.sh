@@ -11,6 +11,6 @@ for ((j=1; j<=num; j++))
 do
     cd ~/serverless-benchmarks${j}
     source ./python-venv/bin/activate
-    ./sebs.py local start $BENCHMARK large out.json --config config/example.json --deployments 1 --verbose --no-remove-containers
+    ./sebs.py local start $BENCHMARK test out.json --config config/example.json --deployments 1 --verbose --no-remove-containers
 done
 
