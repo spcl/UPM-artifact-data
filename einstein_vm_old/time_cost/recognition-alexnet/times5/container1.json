@@ -1,0 +1,1 @@
+{"begin": "1642072703.839022", "end": "1642072704.919517", "request_id": "1e15803c-a6d8-4b25-9212-e0fb68f10e90", "is_cold": false, "result": {"output": {"result": {"idx": 817, "class": "sports_car"}, "measurement": {"download_time": 634518.0, "compute_time": 427129.0, "model_time": 301362.0, "model_download_time": 607076.0, "madvise_time": 1760239.0, "handler_time": 2821983.0}}}}

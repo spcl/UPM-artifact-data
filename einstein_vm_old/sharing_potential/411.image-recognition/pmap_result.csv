@@ -1,0 +1,3 @@
+file,rss,pss,shared_clean,private_clean,private_dirty,anonymous,file_backed
+pmap1.txt, 296172, 291010, 10320, 40700, 245152, 245152, 51020
+pmap2.txt, 307332, 302170, 10320, 42192, 254820, 254820, 52512
